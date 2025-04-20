@@ -18,6 +18,9 @@ const fontHeading = Montserrat({
 })
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/favicon.svg',
+  },
   title: "NBA TECH - Enterprise Software Solutions & Cybersecurity Services",
   description: "Custom software development, cybersecurity solutions, and digital transformation services for businesses. Trusted by industry leaders to deliver measurable ROI and competitive advantage.",
   keywords: "software development, cybersecurity, digital transformation, enterprise solutions, custom software, IT consulting, secure applications, business technology, Wyoming tech company",

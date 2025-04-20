@@ -1,12 +1,18 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "nba-tech-website",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next build && next export -o out",
+    "deploy": "bash deployment/deploy.sh",
+    "deploy:win": "deployment\\deploy.bat",
+    "docker:build": "docker build -t nba-tech-website .",
+    "docker:run": "docker run -p 3000:3000 nba-tech-website",
+    "docker:compose": "docker-compose up -d"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",

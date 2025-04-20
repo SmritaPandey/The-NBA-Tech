@@ -141,9 +141,9 @@ export function HeroSection() {
                 className="bg-gradient-to-r from-[hsl(var(--electric-cyan))] to-[hsl(195,85%,45%)] hover:from-[hsl(195,85%,45%)] hover:to-[hsl(var(--electric-cyan))] text-[hsl(var(--deep-blue))] font-medium shadow-sm hover:shadow-md group transition-all duration-300"
                 rippleColor="rgba(255, 255, 255, 0.5)"
                 onClick={() => {
-                  const servicesSection = document.getElementById('services')
-                  if (servicesSection) {
-                    servicesSection.scrollIntoView({ behavior: 'smooth' })
+                  const contactSection = document.getElementById('contact')
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' })
                   }
                 }}
               >

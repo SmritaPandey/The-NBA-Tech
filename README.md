@@ -41,9 +41,9 @@ A modern, responsive corporate website for NBA TECH with light and dark mode sup
 
 2. Install dependencies:
    ```bash
-   npm install
+   npm install --legacy-peer-deps
    # or
-   pnpm install
+   pnpm install --no-strict-peer-dependencies
    ```
 
 3. Run the development server:
@@ -86,7 +86,26 @@ UI components are built using shadcn/ui, which provides a collection of reusable
 
 ## Deployment
 
-This project can be easily deployed on Vercel:
+See the [Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md) for detailed instructions on deploying the website to various environments.
+
+### Quick Deployment Options
+
+#### Vercel
+
+The easiest way to deploy the website is using Vercel:
+
+```bash
+npm install -g vercel
+vercel
+```
+
+#### Docker
+
+You can also deploy using Docker:
+
+```bash
+docker-compose up -d
+```
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Fnba-tech-redesign)
 

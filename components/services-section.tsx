@@ -150,7 +150,7 @@ const serviceCategories = [
 ]
 
 // Service icon component
-function ServiceIcon({ service }) {
+function ServiceIcon({ service }: { service: any }) {
   return (
     <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-[hsl(var(--background))] dark:bg-[hsl(var(--deep-blue))/50] border border-[hsl(var(--electric-cyan))/30] shadow-sm">
       <motion.div
@@ -166,7 +166,10 @@ function ServiceIcon({ service }) {
 
 export function ServicesSection() {
   const [filter, setFilter] = useState("")
-  const [selectedService, setSelectedService] = useState(null)
+  // Define the service type
+  type ServiceType = typeof serviceCategories[0]
+
+  const [selectedService, setSelectedService] = useState<ServiceType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: true, amount: 0.2 })

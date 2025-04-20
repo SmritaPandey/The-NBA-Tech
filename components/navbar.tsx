@@ -74,6 +74,12 @@ export function Navbar() {
             <Button
               variant="gradient"
               className="hidden md:flex shadow-sm hover:shadow-md bg-gradient-to-r from-[hsl(var(--electric-cyan))] to-[hsl(195,85%,45%)] hover:from-[hsl(195,85%,45%)] hover:to-[hsl(var(--electric-cyan))] text-[hsl(var(--deep-blue))] transition-all duration-300"
+              onClick={() => {
+                const contactSection = document.getElementById('contact')
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' })
+                }
+              }}
             >
               Get Started
             </Button>
@@ -117,6 +123,15 @@ export function Navbar() {
               <Button
                 variant="gradient"
                 className="mt-4 shadow-sm hover:shadow-md bg-gradient-to-r from-[hsl(var(--electric-cyan))] to-[hsl(195,85%,45%)] hover:from-[hsl(195,85%,45%)] hover:to-[hsl(var(--electric-cyan))] text-[hsl(var(--deep-blue))] transition-all duration-300"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  setTimeout(() => {
+                    const contactSection = document.getElementById('contact')
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }, 300)
+                }}
               >
                 Get Started
               </Button>

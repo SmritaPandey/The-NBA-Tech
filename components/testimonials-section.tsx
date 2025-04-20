@@ -55,7 +55,7 @@ export function TestimonialsSection() {
   const [autoplay, setAutoplay] = useState(true)
   const containerRef = useRef(null)
   const isInView = useInView(containerRef, { once: false, amount: 0.3 })
-  const intervalRef = useRef(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length)

@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { FilloutStandardEmbed } from "@fillout/react"
+import "@fillout/react/style.css"
 import {
   Facebook,
   Twitter,
@@ -21,6 +21,8 @@ import {
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  // Using a specific Fillout.com form ID for newsletter subscriptions
+  const newsletterFormId = "3tKPUffptcus" // Newsletter subscription form
 
   return (
     <footer className="bg-[hsl(var(--deep-blue))] text-white pt-16 pb-8">
@@ -34,26 +36,26 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-white/70 mb-6">
-              Pioneering secure digital transformation solutions for enterprises that demand excellence.
+              Delivering high-impact software solutions and cybersecurity services that transform businesses. Trusted by industry leaders since 2018 for innovation, security, and measurable results.
             </p>
             <div className="flex gap-4">
-              <motion.a href="#" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://www.facebook.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
                 <Facebook size={20} />
                 <span className="sr-only">Facebook</span>
               </motion.a>
-              <motion.a href="#" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://twitter.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
                 <Twitter size={20} />
                 <span className="sr-only">Twitter</span>
               </motion.a>
-              <motion.a href="#" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://www.instagram.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
                 <Instagram size={20} />
                 <span className="sr-only">Instagram</span>
               </motion.a>
-              <motion.a href="#" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://www.linkedin.com/company/nbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
                 <Linkedin size={20} />
                 <span className="sr-only">LinkedIn</span>
               </motion.a>
-              <motion.a href="#" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://github.com/nbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
                 <Github size={20} />
                 <span className="sr-only">GitHub</span>
               </motion.a>
@@ -146,20 +148,58 @@ export function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Updated</h3>
+            <h3 className="text-lg font-semibold mb-4">Get Exclusive Insights</h3>
             <p className="text-white/70 mb-4">
-              Subscribe to our newsletter for the latest updates on cybersecurity and tech trends.
+              Join industry leaders receiving our monthly tech briefing with actionable strategies, security alerts, and exclusive content not published anywhere else.
             </p>
-            <div className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Your email"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 focus-visible:ring-[hsl(var(--electric-cyan))]"
-              />
-              <Button className="bg-[hsl(var(--electric-cyan))] hover:bg-[hsl(var(--electric-cyan))/90] text-[hsl(var(--deep-blue))]">
-                <ArrowRight size={16} />
-              </Button>
-            </div>
+            <button
+              className="w-full bg-[hsl(var(--electric-cyan))] hover:bg-[hsl(var(--electric-cyan))/90] text-[hsl(var(--deep-blue))] px-4 py-2 rounded-md flex items-center justify-center"
+              onClick={() => {
+                // Create modal for the form
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+
+                // Create modal content
+                const modalContent = document.createElement('div');
+                modalContent.className = 'bg-white rounded-lg p-4 w-full max-w-2xl max-h-[90vh] overflow-auto relative';
+
+                // Create close button
+                const closeButton = document.createElement('button');
+                closeButton.className = 'absolute top-2 right-2 text-gray-500 hover:text-gray-800';
+                closeButton.innerHTML = '✕';
+                closeButton.onclick = () => document.body.removeChild(modal);
+
+                // Create form container
+                const formContainer = document.createElement('div');
+                formContainer.style.width = '100%';
+                formContainer.style.height = '500px';
+                formContainer.setAttribute('data-fillout-id', newsletterFormId);
+                formContainer.setAttribute('data-fillout-embed-type', 'standard');
+                formContainer.setAttribute('data-fillout-inherit-parameters', '');
+                formContainer.setAttribute('data-fillout-dynamic-resize', '');
+
+                // Add elements to the DOM
+                modalContent.appendChild(closeButton);
+                modalContent.appendChild(formContainer);
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+
+                // Load the Fillout script
+                const script = document.createElement('script');
+                script.src = 'https://server.fillout.com/embed/v1/';
+                document.body.appendChild(script);
+
+                // Close modal when clicking outside
+                modal.addEventListener('click', (e) => {
+                  if (e.target === modal) {
+                    document.body.removeChild(modal);
+                  }
+                });
+              }}
+            >
+              <ArrowRight size={16} className="mr-2" />
+              Subscribe
+            </button>
           </div>
         </div>
 

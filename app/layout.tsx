@@ -18,9 +18,45 @@ const fontHeading = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: "NBA TECH - Pioneering Secure Digital Transformation",
-  description: "Your Data, Our Fortress. Connect, Compute, Conquer.",
-    generator: 'v0.dev'
+  title: "NBA TECH - Enterprise Software Solutions & Cybersecurity Services",
+  description: "Custom software development, cybersecurity solutions, and digital transformation services for businesses. Trusted by industry leaders to deliver measurable ROI and competitive advantage.",
+  keywords: "software development, cybersecurity, digital transformation, enterprise solutions, custom software, IT consulting, secure applications, business technology, Wyoming tech company",
+  authors: [{ name: "NBA TECH LLC" }],
+  creator: "NBA TECH",
+  publisher: "NBA TECH",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://thenbatech.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "NBA TECH - Enterprise Software Solutions & Cybersecurity",
+    description: "Custom software development and cybersecurity solutions that drive business growth and protect your digital assets.",
+    url: 'https://thenbatech.com',
+    siteName: 'NBA TECH',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "NBA TECH - Enterprise Software Solutions",
+    description: "Custom software development and cybersecurity solutions that drive business growth.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 }
 
 export default function RootLayout({
@@ -30,6 +66,43 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "NBA TECH",
+              "url": "https://thenbatech.com",
+              "logo": "https://thenbatech.com/logo.png",
+              "sameAs": [
+                "https://www.facebook.com/thenbatech",
+                "https://twitter.com/thenbatech",
+                "https://www.linkedin.com/company/nbatech",
+                "https://www.instagram.com/thenbatech"
+              ],
+              "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+91-8840592989",
+                "contactType": "customer service",
+                "email": "support@thenbatech.com",
+                "areaServed": "Worldwide",
+                "availableLanguage": ["English", "Hindi"]
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "30 N Gould St Ste R",
+                "addressLocality": "Sheridan",
+                "addressRegion": "WY",
+                "postalCode": "82801",
+                "addressCountry": "US"
+              },
+              "description": "Custom software development, cybersecurity solutions, and digital transformation services for businesses. Trusted by industry leaders to deliver measurable ROI and competitive advantage."
+            })
+          }}
+        />
+      </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable, fontHeading.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}

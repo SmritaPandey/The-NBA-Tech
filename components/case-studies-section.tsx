@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { motion, useInView, useScroll, useTransform } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -12,7 +12,6 @@ import { TiltCard } from "@/components/ui/tilt-card"
 import { ProgressiveImage } from "@/components/ui/progressive-image"
 import {
   ExternalLink,
-  Github,
   Users,
   ArrowRight,
   ChevronRight,
@@ -33,6 +32,7 @@ const caseStudies = [
     thumbnail: "/placeholder.svg?height=300&width=500",
     description: "Comprehensive hostel management system with student portal and admin dashboard.",
     techStack: ["Java", "Spring Boot", "Angular", "Firebase", "SQL"],
+    liveUrl: null, // API/Solution only, no live website
     stats: {
       users: "1000+",
       launch: "Q2 2023",
@@ -57,9 +57,10 @@ const caseStudies = [
     id: "apna-agri",
     title: "Apna Agri Store",
     category: "web",
-    thumbnail: "/placeholder.svg?height=300&width=500",
+    thumbnail: "/apnaagristore.png",
     description: "E-commerce platform connecting farmers directly with consumers.",
     techStack: ["HTML/CSS/JS", "jQuery", "Flask", "Jinja2", "FastAPI"],
+    liveUrl: "https://apnaagri.example.com",
     stats: {
       users: "5K+",
       launch: "Q3 2023",
@@ -71,7 +72,7 @@ const caseStudies = [
       solution:
         "We built a marketplace with location-based search, inventory management, and secure payment processing.",
       impact: "Increased farmer profits by 25% and reduced food waste by connecting local producers with consumers.",
-      screenshots: ["/placeholder.svg?height=400&width=700", "/placeholder.svg?height=400&width=700"],
+      screenshots: ["/apnaagristore.png", "/apnaagristore.png"],
       techFlow: [
         { name: "HTML/CSS/JS", icon: Code, description: "Frontend foundation" },
         { name: "jQuery", icon: Globe, description: "DOM manipulation" },
@@ -87,6 +88,7 @@ const caseStudies = [
     thumbnail: "/placeholder.svg?height=300&width=500",
     description: "Mobile wallet and payment processing solution for small businesses.",
     techStack: ["React Native", "Node.js", "MongoDB", "Firebase"],
+    liveUrl: "https://arthpay.example.com",
     stats: {
       merchants: "2K+",
       launch: "Q1 2024",
@@ -115,6 +117,7 @@ const caseStudies = [
     thumbnail: "/placeholder.svg?height=300&width=500",
     description: "Real-time revenue tracking and analytics for franchise businesses.",
     techStack: ["React Native", "GraphQL", "AWS", "PostgreSQL"],
+    liveUrl: null, // API/Solution only, no live website
     stats: {
       clients: "50+",
       launch: "Q4 2023",
@@ -139,9 +142,10 @@ const caseStudies = [
     id: "hilarious-life",
     title: "Hilarious Life Portfolio",
     category: "web",
-    thumbnail: "/placeholder.svg?height=300&width=500",
+    thumbnail: "/hilariouslife.png",
     description: "Creative portfolio site with interactive storytelling elements.",
     techStack: ["Next.js", "Three.js", "GSAP", "Tailwind CSS"],
+    liveUrl: "https://hilarious-life.example.com",
     stats: {
       visitors: "10K+",
       launch: "Q2 2023",
@@ -153,7 +157,7 @@ const caseStudies = [
       solution:
         "We designed an immersive experience with 3D elements, scroll-based animations, and interactive storytelling components.",
       impact: "Increased client inquiries by 200% and won an industry design award for innovative UX.",
-      screenshots: ["/placeholder.svg?height=400&width=700", "/placeholder.svg?height=400&width=700"],
+      screenshots: ["/hilariouslife.png", "/hilariouslife.png"],
       techFlow: [
         { name: "Next.js", icon: Globe, description: "React framework" },
         { name: "Three.js", icon: Layers, description: "3D visualization" },
@@ -166,9 +170,10 @@ const caseStudies = [
     id: "panchdharma",
     title: "Panchdharma Foundation",
     category: "web",
-    thumbnail: "/placeholder.svg?height=300&width=500",
+    thumbnail: "/panchdharmagroup.png",
     description: "Trilogy of interconnected sites for a non-profit organization.",
     techStack: ["WordPress", "PHP", "MySQL", "JavaScript"],
+    liveUrl: "https://panchdharma.example.org",
     stats: {
       reach: "15K+",
       launch: "Q3 2022",
@@ -180,7 +185,7 @@ const caseStudies = [
       solution:
         "We developed a trilogy of interconnected sites with shared authentication, donation processing, and content management.",
       impact: "Increased online donations by 45% and volunteer applications by 60% through improved digital presence.",
-      screenshots: ["/placeholder.svg?height=400&width=700", "/placeholder.svg?height=400&width=700"],
+      screenshots: ["/panchdharmagroup.png", "/panchdharmatechnologies.png"],
       techFlow: [
         { name: "WordPress", icon: Globe, description: "CMS platform" },
         { name: "PHP", icon: Code, description: "Server-side language" },
@@ -193,9 +198,10 @@ const caseStudies = [
     id: "bookmy-flower",
     title: "BookMyFlower",
     category: "crm",
-    thumbnail: "/placeholder.svg?height=300&width=500",
+    thumbnail: "/bookmyflowers.png",
     description: "E-commerce and CRM solution for a flower delivery service.",
     techStack: ["WordPress", "WooCommerce", "PHP", "MySQL"],
+    liveUrl: "https://bookmyflower.example.com",
     stats: {
       orders: "5K+",
       launch: "Q1 2023",
@@ -208,7 +214,7 @@ const caseStudies = [
         "We implemented a custom WooCommerce solution with subscription options, occasion reminders, and personalized recommendations.",
       impact:
         "Achieved 65% customer retention rate and 40% increase in average order value through CRM-driven personalization.",
-      screenshots: ["/placeholder.svg?height=400&width=700", "/placeholder.svg?height=400&width=700"],
+      screenshots: ["/bookmyflowers.png", "/bookmyflowers.png"],
       techFlow: [
         { name: "WordPress", icon: Globe, description: "CMS platform" },
         { name: "WooCommerce", icon: Globe, description: "E-commerce plugin" },
@@ -224,6 +230,7 @@ const caseStudies = [
     thumbnail: "/placeholder.svg?height=300&width=500",
     description: "Patient management portal for an eye care clinic.",
     techStack: ["React.js", "Node.js", "MongoDB", "Express"],
+    liveUrl: null, // API/Solution only, no live website
     stats: {
       patients: "20K+",
       launch: "Q4 2022",
@@ -254,8 +261,7 @@ export function CaseStudiesSection() {
   const [activeProject, setActiveProject] = useState<string | null>(null)
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.2 })
-  const { scrollYProgress } = useScroll({ target: ref })
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
+  // Removed scroll-based opacity animation
 
   // For the sticky project navigator
   const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
@@ -292,7 +298,7 @@ export function CaseStudiesSection() {
         <ClientOnlyDataStreams />
       </div>
 
-      <motion.div className="container mx-auto relative z-10" style={{ opacity }}>
+      <div className="container mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -411,7 +417,7 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Overview Section */}
-                  <div id="overview" ref={(el) => (projectRefs.current["overview"] = el)} className="mb-8">
+                  <div id="overview" ref={(el) => { if (el) projectRefs.current["overview"] = el; return undefined; }} className="mb-8">
                     {/* Hero Carousel */}
                     <Carousel className="w-full mb-8">
                       <CarouselContent>
@@ -419,11 +425,14 @@ export function CaseStudiesSection() {
                           <CarouselItem key={index}>
                             <div className="p-1">
                               <div className="overflow-hidden rounded-xl">
-                                <ProgressiveImage
-                                  src={screenshot || "/placeholder.svg"}
-                                  alt={`${selectedCase.title} screenshot ${index + 1}`}
-                                  className="w-full h-auto aspect-video"
-                                />
+                                <div className="relative w-full aspect-video overflow-hidden">
+                                  <ProgressiveImage
+                                    src={screenshot || "/placeholder.svg"}
+                                    alt={`${selectedCase.title} screenshot ${index + 1}`}
+                                    className="w-full h-full"
+                                    objectPosition="top"
+                                  />
+                                </div>
                               </div>
                             </div>
                           </CarouselItem>
@@ -479,7 +488,7 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Challenge Section */}
-                  <div id="challenge" ref={(el) => (projectRefs.current["challenge"] = el)} className="mb-8">
+                  <div id="challenge" ref={(el) => { if (el) projectRefs.current["challenge"] = el; return undefined; }} className="mb-8">
                     <h3 className="text-lg font-semibold mb-3">Challenge</h3>
                     <Card enhancedHover>
                       <CardContent className="pt-6">
@@ -489,7 +498,7 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Solution Section */}
-                  <div id="solution" ref={(el) => (projectRefs.current["solution"] = el)} className="mb-8">
+                  <div id="solution" ref={(el) => { if (el) projectRefs.current["solution"] = el; return undefined; }} className="mb-8">
                     <h3 className="text-lg font-semibold mb-3">Solution</h3>
                     <Card enhancedHover>
                       <CardContent className="pt-6">
@@ -499,7 +508,7 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Tech Stack Section */}
-                  <div id="tech-stack" ref={(el) => (projectRefs.current["tech-stack"] = el)} className="mb-8">
+                  <div id="tech-stack" ref={(el) => { if (el) projectRefs.current["tech-stack"] = el; return undefined; }} className="mb-8">
                     <h3 className="text-lg font-semibold mb-3">Technologies Used</h3>
                     <div className="flex flex-wrap gap-2 mb-4">
                       {selectedCase.techStack.map((tech, index) => (
@@ -521,7 +530,7 @@ export function CaseStudiesSection() {
                   </div>
 
                   {/* Impact Section */}
-                  <div id="impact" ref={(el) => (projectRefs.current["impact"] = el)} className="mb-8">
+                  <div id="impact" ref={(el) => { if (el) projectRefs.current["impact"] = el; return undefined; }} className="mb-8">
                     <h3 className="text-lg font-semibold mb-3">Impact</h3>
                     <div className="bg-muted/30 rounded-lg p-6 mb-8">
                       <p className="text-muted-foreground mb-6">{selectedCase.details.impact}</p>
@@ -544,27 +553,24 @@ export function CaseStudiesSection() {
 
                   {/* Action Buttons */}
                   <div className="flex flex-wrap gap-4 justify-end">
-                    <Button variant="outline" className="gap-2 relative overflow-hidden group border border-[hsl(var(--electric-cyan))/30] hover:border-[hsl(var(--electric-cyan))]">
-                      <span className="relative z-10 flex items-center gap-2">
-                        <Github className="h-4 w-4 text-[hsl(var(--electric-cyan))]" />
-                        View Code
-                      </span>
-                      <span className="absolute inset-0 bg-[hsl(var(--electric-cyan))/10] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-md" />
-                    </Button>
-                    <Button variant="gradient" className="gap-2 relative overflow-hidden group bg-gradient-to-r from-[hsl(var(--electric-cyan))] to-[hsl(195,85%,45%)] hover:from-[hsl(195,85%,45%)] hover:to-[hsl(var(--electric-cyan))] text-[hsl(var(--deep-blue))] transition-all duration-300">
-                      <span className="relative z-10 flex items-center gap-2">
-                        <ExternalLink className="h-4 w-4" />
-                        View Live
-                      </span>
-                      <span className="absolute inset-0 bg-[hsl(var(--deep-blue))/10] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-md" />
-                    </Button>
+                    {selectedCase.liveUrl && (
+                      <a href={selectedCase.liveUrl} target="_blank" rel="noopener noreferrer">
+                        <Button variant="gradient" className="gap-2 relative overflow-hidden group bg-gradient-to-r from-[hsl(var(--electric-cyan))] to-[hsl(195,85%,45%)] hover:from-[hsl(195,85%,45%)] hover:to-[hsl(var(--electric-cyan))] text-[hsl(var(--deep-blue))] transition-all duration-300">
+                          <span className="relative z-10 flex items-center gap-2">
+                            <ExternalLink className="h-4 w-4" />
+                            Visit Website
+                          </span>
+                          <span className="absolute inset-0 bg-[hsl(var(--deep-blue))/10] scale-0 group-hover:scale-100 transition-transform duration-300 origin-center rounded-md" />
+                        </Button>
+                      </a>
+                    )}
                   </div>
                 </div>
               </>
             )}
           </DialogContent>
         </Dialog>
-      </motion.div>
+      </div>
     </section>
   )
 }
@@ -573,22 +579,39 @@ function ProjectGrid({
   projects,
   setSelectedCase,
   setIsDialogOpen,
-  isInView,
+  // isInView parameter is no longer used since we removed animations
 }: {
   projects: typeof caseStudies
   setSelectedCase: (project: (typeof caseStudies)[0]) => void
   setIsDialogOpen: (open: boolean) => void
-  isInView: boolean
+  isInView?: boolean
 }) {
+  const [showAll, setShowAll] = useState(false);
+
+  // Helper function to check if a project has a real image (not a placeholder)
+  const hasRealImage = (project: (typeof caseStudies)[0]) => {
+    return !project.thumbnail.includes('placeholder.svg');
+  };
+
+  // Sort projects to prioritize those with real images
+  const sortedProjects = [...projects].sort((a, b) => {
+    const aHasRealImage = hasRealImage(a);
+    const bHasRealImage = hasRealImage(b);
+
+    if (aHasRealImage && !bHasRealImage) return -1; // a comes first
+    if (!aHasRealImage && bHasRealImage) return 1;  // b comes first
+    return 0; // keep original order if both have real images or both have placeholders
+  });
+
+  const displayedProjects = showAll ? sortedProjects : sortedProjects.slice(0, 3);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.length > 0 ? (
-        projects.map((project, index) => (
-          <motion.div
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedProjects.length > 0 ? (
+          displayedProjects.map((project) => (
+          <div
             key={project.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
             className="case-study-card perspective"
           >
             <TiltCard
@@ -602,11 +625,14 @@ function ProjectGrid({
             >
               <Card enhancedHover className="h-full overflow-hidden border-[hsl(var(--electric-cyan))/20] group-hover:border-[hsl(var(--electric-cyan))/50] transition-all duration-300">
                 <div className="overflow-hidden">
-                  <ProgressiveImage
-                    src={project.thumbnail || "/placeholder.svg"}
-                    alt={project.title}
-                    className="w-full h-48 transition-transform duration-500 group-hover:scale-105"
-                  />
+                  <div className="relative w-full h-48 overflow-hidden group-hover:scale-[1.02] transition-transform duration-500">
+                    <ProgressiveImage
+                      src={project.thumbnail || "/placeholder.svg"}
+                      alt={project.title}
+                      className="w-full h-full"
+                      objectPosition="top"
+                    />
+                  </div>
 
                   {/* Quick-stats overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-blue))/90] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
@@ -660,15 +686,29 @@ function ProjectGrid({
                 </CardFooter>
               </Card>
             </TiltCard>
-          </motion.div>
-        ))
-      ) : (
-        <div className="col-span-full text-center py-12">
-          <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <p className="text-muted-foreground">No projects found in this category.</p>
+          </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-muted-foreground">No projects found in this category.</p>
+          </div>
+        )}
+      </div>
+
+      {/* View More Button */}
+      {sortedProjects.length > 3 && !showAll && (
+        <div className="mt-8 text-center">
+          <Button
+            variant="outline"
+            onClick={() => setShowAll(true)}
+            className="border border-[hsl(var(--electric-cyan))/30] hover:bg-[hsl(var(--electric-cyan))/10] hover:text-[hsl(var(--electric-cyan))] hover:border-[hsl(var(--electric-cyan))] transition-all duration-300"
+          >
+            View More Projects <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       )}
-    </div>
+    </>
   )
 }
 

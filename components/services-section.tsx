@@ -23,7 +23,7 @@ const serviceCategories = [
     name: "Software Development",
     icon: Code,
     color: "software-blue",
-    description: "Custom software solutions for web, mobile, and enterprise applications.",
+    description: "Enterprise-grade custom software development for web, mobile, and cloud applications that drive business growth and efficiency.",
     services: [
       "Web App Development",
       "Mobile App Development",
@@ -46,7 +46,7 @@ const serviceCategories = [
     name: "Cybersecurity",
     icon: Shield,
     color: "cybersecurity-green",
-    description: "Comprehensive security solutions to protect your digital assets.",
+    description: "Advanced cybersecurity solutions with 24/7 monitoring to protect your critical data and digital infrastructure from evolving threats.",
     services: ["24/7 C-SOC", "GRC", "IRMS", "VAPT", "Framework Design", "Take-Down Services"],
     details: [
       "24/7 SOC Ops with SIEM & SOAR pipelines",
@@ -62,7 +62,7 @@ const serviceCategories = [
     name: "HR & Training",
     icon: Users,
     color: "hr-purple",
-    description: "Talent acquisition and development solutions for your organization.",
+    description: "Strategic talent acquisition, workforce management, and specialized technical training programs for high-performing teams.",
     services: [
       "Facility Management",
       "Manpower Supply",
@@ -85,7 +85,7 @@ const serviceCategories = [
     name: "Digital Marketing",
     icon: BarChart,
     color: "marketing-orange",
-    description: "Strategic digital marketing services to grow your online presence.",
+    description: "Data-driven digital marketing strategies that increase visibility, generate qualified leads, and deliver measurable ROI for your business.",
     services: ["SEO", "Email Marketing", "Social Media", "Animated Content", "Video Production", "Content Strategy"],
     details: [
       "Technical and content SEO optimization",
@@ -101,7 +101,7 @@ const serviceCategories = [
     name: "Infrastructure",
     icon: Database,
     color: "infrastructure-red",
-    description: "Robust infrastructure solutions for enterprise operations.",
+    description: "Scalable, secure, and resilient infrastructure solutions designed for modern enterprise operations and mission-critical workloads.",
     services: ["DC/DR", "VDI", "Cloud Services", "Sec-aaS", "Hardware Supply", "Video Conferencing"],
     details: [
       "Data Center and Disaster Recovery planning",
@@ -117,7 +117,7 @@ const serviceCategories = [
     name: "Security Products",
     icon: Cpu,
     color: "deep-blue",
-    description: "Advanced security products for comprehensive protection.",
+    description: "Industry-leading security products and platforms that provide comprehensive protection against sophisticated cyber threats and vulnerabilities.",
     services: ["SIEM", "SOAR", "EDR", "XDR", "EPS", "DLP", "NOC/SOC", "Antiviruses"],
     details: [
       "Security Information and Event Management",
@@ -135,7 +135,7 @@ const serviceCategories = [
     name: "Banking Solutions",
     icon: CreditCard,
     color: "banking-gold",
-    description: "Secure and efficient banking and enterprise solutions.",
+    description: "Secure, compliant, and efficient banking technology solutions that modernize financial operations and enhance customer experiences.",
     services: ["Core Banking", "RTGS/NEFT", "ATM/POS", "eKYC", "UPI", "ERP", "PAM/IAM"],
     details: [
       "Comprehensive core banking systems",
@@ -202,7 +202,7 @@ export function ServicesSection() {
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
           <p className="text-foreground/70 max-w-2xl mx-auto">
-            Comprehensive digital solutions tailored to secure and transform your business operations.
+            Industry-leading software development and cybersecurity solutions that drive innovation, protect critical assets, and accelerate business growth. Trusted by enterprises across industries since 2018.
           </p>
 
           {/* Search filter */}
@@ -291,6 +291,7 @@ export function ServicesSection() {
                 </DialogTrigger>
 
                 <DialogContent className="sm:max-w-5xl max-h-[90vh] overflow-y-auto p-0">
+                  <DialogTitle className="sr-only">{service.name} Service Details</DialogTitle>
                   {/* Hero banner with animation */}
                   <div className="w-full h-64 bg-gradient-to-r from-[hsl(var(--deep-blue))] to-[hsl(var(--electric-cyan))] flex items-center justify-center overflow-hidden relative">
                     <div className="absolute inset-0 bg-grid-white\/10 [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.8))]" />
@@ -433,9 +434,11 @@ export function ServicesSection() {
                               Request Quote
                             </Button>
 
+                            {/* Commented out for now
                             <Button variant="outline" className="w-full">
                               Download Brochure
                             </Button>
+                            */}
                           </div>
                         </div>
                       </div>
@@ -481,6 +484,48 @@ export function ServicesSection() {
               </Dialog>
             </motion.div>
           ))}
+
+          {/* Contact Us for More Services Card */}
+          {filter === "" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: filteredServices.length * 0.1 }}
+            >
+              <div
+                className={cn(
+                  "service-card bg-gradient-to-br from-[hsl(var(--deep-blue))] to-[hsl(var(--electric-cyan))] rounded-xl p-6 h-full cursor-pointer border border-[hsl(var(--electric-cyan))/30] hover:border-[hsl(var(--electric-cyan))]",
+                  "transition-all duration-300 ease-out shadow-sm hover:shadow-md hover:translate-y-[-5px]"
+                )}
+                onClick={() => {
+                  const contactSection = document.getElementById('contact')
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
+              >
+                <div className="flex flex-col items-center text-center h-full justify-center text-white">
+                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm">
+                    <motion.div
+                      initial={{ rotate: -10, scale: 0.9 }}
+                      animate={{ rotate: 0, scale: 1 }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                      <Search className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
+                    </motion.div>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Need Something Specific?</h3>
+                  <p className="text-white/90 mb-4">We offer customized solutions tailored to your unique business challenges.</p>
+
+                  <div className="mt-auto">
+                    <span className="inline-block text-sm px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white font-medium border border-white/20 hover:bg-white/20 transition-colors duration-300">
+                      Contact Us for Custom Solutions
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
         </div>
 
         {filteredServices.length === 0 && (

@@ -2,104 +2,16 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
-import { MapPin, Phone, Mail, Send, CheckCircle } from "lucide-react"
+import { MapPin, Phone, Mail, Shield } from "lucide-react"
+import { FilloutStandardEmbed } from "@fillout/react"
+import "@fillout/react/style.css"
 
 export function ContactSection() {
-  const { toast } = useToast()
-  const [formState, setFormState] = useState({
-    name: "",
-    email: "",
-    company: "",
-    service: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormState((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSelectChange = (value: string) => {
-    setFormState((prev) => ({ ...prev, service: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setIsSubmitted(true)
-
-      // Show success toast
-      toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
-      })
-
-      // Trigger confetti effect
-      triggerConfetti()
-
-      // Reset form after a delay
-      setTimeout(() => {
-        setIsSubmitted(false)
-        setFormState({
-          name: "",
-          email: "",
-          company: "",
-          service: "",
-          message: "",
-        })
-      }, 3000)
-    }, 1500)
-  }
-
-  const triggerConfetti = () => {
-    const confettiCount = 100
-    const container = document.querySelector("#contact")
-    if (!container) return
-
-    for (let i = 0; i < confettiCount; i++) {
-      const confetti = document.createElement("div")
-      confetti.className = "confetti"
-
-      // Random properties
-      const size = Math.random() * 10 + 5
-      const color = `hsl(${Math.random() * 360}, 100%, 50%)`
-      const left = Math.random() * 100
-      const animationDuration = Math.random() * 3 + 2
-
-      // Apply styles
-      confetti.style.width = `${size}px`
-      confetti.style.height = `${size}px`
-      confetti.style.backgroundColor = color
-      confetti.style.left = `${left}%`
-      confetti.style.top = "0"
-      confetti.style.position = "absolute"
-      confetti.style.borderRadius = "50%"
-      confetti.style.zIndex = "10"
-      confetti.style.animation = `confetti-fall ${animationDuration}s ease-in forwards`
-
-      container.appendChild(confetti)
-
-      // Remove after animation completes
-      setTimeout(() => {
-        confetti.remove()
-      }, animationDuration * 1000)
-    }
-  }
+  // Using the same form ID for both contact and security audit
+  const contactFormId = "cAWaWMHJmpus" // General contact form
+  const securityAuditFormId = contactFormId // Using the same form for security audit
 
   return (
     <section id="contact" className="py-20 bg-muted/30 relative overflow-hidden">
@@ -151,122 +63,13 @@ export function ContactSection() {
             transition={{ duration: 0.6 }}
           >
             <Card>
-              <CardHeader>
-                <CardTitle>Contact Us</CardTitle>
-                <CardDescription>Fill out the form below and our team will get back to you shortly.</CardDescription>
-              </CardHeader>
+              {/* Card header removed as the Fillout form already has a heading */}
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        placeholder="John Doe"
-                        value={formState.name}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="john@example.com"
-                        value={formState.email}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="company">Company</Label>
-                      <Input
-                        id="company"
-                        name="company"
-                        placeholder="Your Company"
-                        value={formState.company}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="service">Service Interested In</Label>
-                      <Select value={formState.service} onValueChange={handleSelectChange}>
-                        <SelectTrigger id="service">
-                          <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="software">Software Development</SelectItem>
-                          <SelectItem value="cybersecurity">Cybersecurity</SelectItem>
-                          <SelectItem value="hr">HR & Training</SelectItem>
-                          <SelectItem value="marketing">Digital Marketing</SelectItem>
-                          <SelectItem value="infrastructure">Infrastructure</SelectItem>
-                          <SelectItem value="banking">Banking Solutions</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea
-                      id="message"
-                      name="message"
-                      placeholder="Tell us about your project or requirements"
-                      rows={5}
-                      value={formState.message}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full bg-[hsl(var(--deep-blue))] hover:bg-[hsl(var(--deep-blue))/90] text-white"
-                    disabled={isSubmitting || isSubmitted}
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <svg
-                          className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                        Sending...
-                      </span>
-                    ) : isSubmitted ? (
-                      <span className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4" />
-                        Message Sent!
-                      </span>
-                    ) : (
-                      <span className="flex items-center gap-2">
-                        <Send className="h-4 w-4" />
-                        Send Message
-                      </span>
-                    )}
-                  </Button>
-                </form>
+                <div style={{ height: "500px" }}>
+                  <FilloutStandardEmbed
+                    filloutId={contactFormId}
+                  />
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -293,9 +96,9 @@ export function ContactSection() {
                     <div>
                       <h3 className="font-medium">Headquarters</h3>
                       <p className="text-muted-foreground">
-                        123 Tech Park, Innovation District
+                        30 N Gould St Ste R
                         <br />
-                        Bangalore, Karnataka 560001
+                        Sheridan, WY 82801
                       </p>
                     </div>
                   </div>
@@ -306,7 +109,7 @@ export function ContactSection() {
                     </div>
                     <div>
                       <h3 className="font-medium">Phone</h3>
-                      <p className="text-muted-foreground">+91 (800) 123-4567</p>
+                      <p className="text-muted-foreground">+91 8840592989</p>
                       <p className="text-muted-foreground">Mon-Fri: 9:00 AM - 6:00 PM IST</p>
                     </div>
                   </div>
@@ -317,8 +120,7 @@ export function ContactSection() {
                     </div>
                     <div>
                       <h3 className="font-medium">Email</h3>
-                      <p className="text-muted-foreground">info@nbatech.com</p>
-                      <p className="text-muted-foreground">support@nbatech.com</p>
+                      <p className="text-muted-foreground">nbatech467@gmail.com</p>
                     </div>
                   </div>
                 </div>
@@ -335,9 +137,56 @@ export function ContactSection() {
                   Our security experts will analyze your infrastructure and provide actionable recommendations to
                   enhance your security posture.
                 </p>
-                <Button className="w-full bg-[hsl(var(--cybersecurity-green))] hover:bg-[hsl(var(--cybersecurity-green))/90] text-white">
-                  Request Free Audit
-                </Button>
+                <div className="w-full">
+                  <button
+                    className="w-full bg-[hsl(var(--cybersecurity-green))] hover:bg-[hsl(var(--cybersecurity-green))/90] text-white px-4 py-2 rounded-md flex items-center justify-center"
+                    onClick={() => {
+                      // Create modal for the form
+                      const modal = document.createElement('div');
+                      modal.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+
+                      // Create modal content
+                      const modalContent = document.createElement('div');
+                      modalContent.className = 'bg-white rounded-lg p-4 w-full max-w-2xl max-h-[90vh] overflow-auto relative';
+
+                      // Create close button
+                      const closeButton = document.createElement('button');
+                      closeButton.className = 'absolute top-2 right-2 text-gray-500 hover:text-gray-800';
+                      closeButton.innerHTML = '✕';
+                      closeButton.onclick = () => document.body.removeChild(modal);
+
+                      // Create form container
+                      const formContainer = document.createElement('div');
+                      formContainer.style.width = '100%';
+                      formContainer.style.height = '500px';
+                      formContainer.setAttribute('data-fillout-id', securityAuditFormId);
+                      formContainer.setAttribute('data-fillout-embed-type', 'standard');
+                      formContainer.setAttribute('data-fillout-inherit-parameters', '');
+                      formContainer.setAttribute('data-fillout-dynamic-resize', '');
+
+                      // Add elements to the DOM
+                      modalContent.appendChild(closeButton);
+                      modalContent.appendChild(formContainer);
+                      modal.appendChild(modalContent);
+                      document.body.appendChild(modal);
+
+                      // Load the Fillout script
+                      const script = document.createElement('script');
+                      script.src = 'https://server.fillout.com/embed/v1/';
+                      document.body.appendChild(script);
+
+                      // Close modal when clicking outside
+                      modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                          document.body.removeChild(modal);
+                        }
+                      });
+                    }}
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    Request Free Audit
+                  </button>
+                </div>
               </CardContent>
             </Card>
           </motion.div>

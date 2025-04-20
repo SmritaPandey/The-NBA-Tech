@@ -22,7 +22,7 @@ export function HeroSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   // Typing effect for the headline
-  const headline = "Pioneering Secure Digital Transformation"
+  const headline = "Enterprise Software Solutions That Drive Growth"
   const words = headline.split(" ")
 
   // Items for the circular reveal heading
@@ -99,7 +99,7 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-sm font-medium tracking-wider text-[hsl(var(--electric-cyan))] dark:text-[hsl(var(--electric-cyan))]"
             >
-              YOUR DATA, OUR FORTRESS
+              CONNECT · COMPUTE · CONQUER
             </motion.div>
 
             <h1 className="mt-2 text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -126,8 +126,7 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.8 }}
               className="mt-4 text-lg text-foreground/80 max-w-lg leading-relaxed"
             >
-              Delivering cutting-edge software development, cybersecurity, and digital transformation solutions for
-              enterprises that demand excellence.
+              Empowering businesses with custom software solutions, advanced cybersecurity, and strategic digital transformation. Trusted by industry leaders to deliver measurable ROI and competitive advantage.
             </motion.p>
 
             <motion.div

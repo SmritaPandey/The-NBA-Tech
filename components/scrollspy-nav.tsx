@@ -13,6 +13,8 @@ const navItems = [
   { id: "services", label: "Services" },
   { id: "case-studies", label: "Our Work" },
   { id: "timeline", label: "Journey" },
+  // { id: "testimonials", label: "Testimonials" }, // Commented out for now
+  { id: "faq", label: "FAQ" },
   { id: "contact", label: "Contact" },
 ]
 

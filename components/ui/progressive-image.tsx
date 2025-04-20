@@ -9,6 +9,7 @@ interface ProgressiveImageProps {
   className?: string
   placeholderColor?: string
   aspectRatio?: string
+  objectPosition?: string
 }
 
 export function ProgressiveImage({
@@ -17,6 +18,7 @@ export function ProgressiveImage({
   className = "",
   placeholderColor = "hsl(var(--muted))",
   aspectRatio = "16/9",
+  objectPosition = "center",
 }: ProgressiveImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isError, setIsError] = useState(false)
@@ -25,18 +27,18 @@ export function ProgressiveImage({
     // Reset states when src changes
     setIsLoaded(false)
     setIsError(false)
-    
+
     const img = new Image()
     img.src = src
-    
+
     img.onload = () => {
       setIsLoaded(true)
     }
-    
+
     img.onerror = () => {
       setIsError(true)
     }
-    
+
     return () => {
       img.onload = null
       img.onerror = null
@@ -44,14 +46,14 @@ export function ProgressiveImage({
   }, [src])
 
   return (
-    <div 
+    <div
       className={`relative overflow-hidden ${className}`}
       style={{ aspectRatio }}
     >
       {/* Placeholder */}
       <div
         className="absolute inset-0 bg-muted"
-        style={{ 
+        style={{
           backgroundColor: placeholderColor,
           opacity: isLoaded ? 0 : 1,
           transition: "opacity 0.3s ease-out",
@@ -63,15 +65,16 @@ export function ProgressiveImage({
           </div>
         )}
       </div>
-      
+
       {/* Actual image */}
       {!isError && (
         <motion.img
           src={src}
           alt={alt}
           className="w-full h-full object-cover"
+          style={{ objectPosition }}
           initial={{ opacity: 0, filter: "blur(10px)" }}
-          animate={{ 
+          animate={{
             opacity: isLoaded ? 1 : 0,
             filter: isLoaded ? "blur(0px)" : "blur(10px)",
           }}

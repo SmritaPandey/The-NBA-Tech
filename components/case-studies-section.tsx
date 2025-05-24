@@ -328,7 +328,7 @@ export function CaseStudiesSection() {
         }
       });
     };
-  }, [activeCategory]); // Re-run if activeCategory changes, as cards might be re-rendered by Tabs
+  }, [activeCategory]); // Ensured semicolon for the first useEffect
 
   // For the sticky project navigator
   const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
@@ -355,14 +355,14 @@ export function CaseStudiesSection() {
     }
 
     window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [isDialogOpen, selectedCase])
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isDialogOpen, selectedCase]); // Ensured semicolon is present
 
-  return (
+  return ( // Ensured this is on a new line and properly formatted
     <section id="case-studies" className="pt-32 pb-20 bg-background relative overflow-hidden" ref={sectionRef}>
       {/* Background data stream animation */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <ClientOnlyDataStreams />
+        {/* <ClientOnlyDataStreams /> */} {/* Commented out for debugging */}
       </div>
 
       <div className="container mx-auto relative z-10">

@@ -1,7 +1,9 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, useInView } from "framer-motion"
+import { useState, useRef, useEffect } from "react" // Added useEffect
+import { motion, useInView } from "framer-motion" // useInView will be removed later
+import { gsap } from "gsap" // Added gsap
+import { ScrollTrigger } from "gsap/ScrollTrigger" // Added ScrollTrigger
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -153,7 +155,9 @@ const serviceCategories = [
 function ServiceIcon({ service }: { service: any }) {
   return (
     <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-[hsl(var(--background))] dark:bg-[hsl(var(--deep-blue))/50] border border-[hsl(var(--electric-cyan))/30] shadow-sm">
+      {/* Added class service-icon-animation-target for GSAP hover effect */}
       <motion.div
+        className="service-icon-animation-target" 
         initial={{ rotate: -10, scale: 0.9 }}
         animate={{ rotate: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -171,8 +175,99 @@ export function ServicesSection() {
 
   const [selectedService, setSelectedService] = useState<ServiceType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const containerRef = useRef(null)
-  const isInView = useInView(containerRef, { once: true, amount: 0.2 })
+  const sectionRef = useRef<HTMLDivElement>(null) 
+  const titleRef = useRef<HTMLDivElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+  // isInView hook is no longer needed.
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+    const mm = gsap.matchMedia()
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Section Title Animation
+      if (titleRef.current) {
+        gsap.fromTo(
+          titleRef.current,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: "top bottom-=100px",
+              once: true,
+            },
+          }
+        )
+      }
+
+      // Service Cards Staggered Animation
+      if (gridRef.current) {
+        const cards = gsap.utils.toArray<HTMLDivElement>(
+          gridRef.current.querySelectorAll(".service-card-item") // Targeting specific items
+        )
+        if (cards.length > 0) {
+          gsap.set(cards, { opacity: 0, y: 50, scale: 0.95 }); 
+          gsap.to(
+            cards,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.6,
+              ease: "power3.out",
+              stagger: 0.15,
+              scrollTrigger: {
+                trigger: gridRef.current,
+                start: "top bottom-=150px",
+                once: true,
+              },
+            }
+          )
+        }
+      }
+      
+      // GSAP hover animations for service cards
+      const allServiceCardElements = gsap.utils.toArray<HTMLDivElement>(".service-card"); 
+      allServiceCardElements.forEach(cardElement => {
+        gsap.set(cardElement, { transformOrigin: "center center" });
+        const iconElement = cardElement.querySelector(".service-icon-animation-target"); // Added class for icon
+
+        const hoverTimeline = gsap.timeline({ paused: true });
+        hoverTimeline.to(cardElement, { 
+          y: -5, 
+          scale: 1.03, 
+          boxShadow: "0px 10px 20px rgba(0,0,0,0.1)", // Ensure dark mode compatibility for shadow
+          duration: 0.3, 
+          ease: "power2.out" 
+        });
+        
+        if (iconElement) {
+           hoverTimeline.to(iconElement, { scale: 1.15, rotate: -5, duration: 0.3, ease: "power2.out" }, "-=0.2");
+        }
+        
+        cardElement.addEventListener("mouseenter", () => hoverTimeline.play());
+        cardElement.addEventListener("mouseleave", () => hoverTimeline.reverse());
+      });
+
+    }) // End of matchMedia
+
+    return () => {
+      mm.revert() 
+      // Kill all scroll triggers specifically created for this component
+      ScrollTrigger.getAll().forEach(trigger => {
+        if (trigger.vars.trigger === titleRef.current || trigger.vars.trigger === gridRef.current) {
+          trigger.kill();
+        }
+      });
+      // Remove event listeners - GSAP's .revert() should handle listeners on tweens/timelines,
+      // but manual listeners added directly would need removal.
+      // For this setup, GSAP's cleanup is usually sufficient for timeline-event listeners.
+    }
+  }, []) // Empty dependency array
 
   // Filter services based on search input
   const filteredServices = serviceCategories.filter(
@@ -183,7 +278,7 @@ export function ServicesSection() {
   )
 
   return (
-    <div id="services" className="py-20 bg-background relative overflow-hidden" ref={containerRef}>
+    <div id="services" className="py-20 bg-background relative overflow-hidden" ref={sectionRef}>
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-3 pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -197,12 +292,8 @@ export function ServicesSection() {
       </div>
 
       <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        {/* Removed motion.div, assigned titleRef */}
+        <div ref={titleRef} className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Services</h2>
           <p className="text-foreground/70 max-w-2xl mx-auto">
             Industry-leading software development and cybersecurity solutions that drive innovation, protect critical assets, and accelerate business growth. Trusted by enterprises across industries since 2018.
@@ -231,16 +322,11 @@ export function ServicesSection() {
           </div>
         </motion.div>
 
-        {/* Services grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Services grid - assigned gridRef, removed Framer motion from children */}
+        <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredServices.map((service, index) => (
-            <motion.div
-              key={service.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
+            // Added service-card-item for GSAP to target, removed motion.div
+            <div key={service.id} className="service-card-item opacity-0"> {/* Initial opacity for GSAP */}
               <Dialog
                 open={isDialogOpen && selectedService?.id === service.id}
                 onOpenChange={(open) => {
@@ -249,10 +335,11 @@ export function ServicesSection() {
                 }}
               >
                 <DialogTrigger asChild>
+                  {/* service-card class is kept for GSAP hover targeting. Removed CSS hover classes. */}
                   <div
                     className={cn(
-                      "service-card bg-card rounded-xl p-6 h-full cursor-pointer border border-[hsl(var(--electric-cyan))/30] hover:border-[hsl(var(--electric-cyan))]",
-                      "transition-all duration-300 ease-out shadow-sm hover:shadow-md dark:bg-[hsl(var(--card))] dark:shadow-[0_4px_12px_rgba(0,0,0,0.25)] hover:translate-y-[-5px]"
+                      "service-card bg-card rounded-xl p-6 h-full cursor-pointer border border-[hsl(var(--electric-cyan))/30]",
+                      "shadow-sm dark:bg-[hsl(var(--card))] dark:shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
                     )}
                     onClick={() => {
                       setSelectedService(service)
@@ -260,7 +347,7 @@ export function ServicesSection() {
                     }}
                   >
                     <div className="flex flex-col items-center text-center">
-                      <ServiceIcon service={service} />
+                      <ServiceIcon service={service} /> {/* Contains its own motion.div for icon animation */}
                       <h3 className="text-xl font-semibold mb-2">{service.name}</h3>
                       <p className="text-muted-foreground mb-4 line-clamp-2">{service.description}</p>
                       <div className="flex flex-wrap gap-2 mt-auto justify-center">
@@ -303,7 +390,7 @@ export function ServicesSection() {
                     <div className="absolute inset-0">
                       <div className="absolute inset-0 flex items-center justify-center">
                         <service.icon
-                          className="h-48 w-48 text-white/10 animate-pulse"
+                          className="h-48 w-48 text-[hsla(var(--primary-foreground),0.1)] animate-pulse" /* Changed text-white/10 */
                           style={{ animationDuration: "3s" }}
                         />
                       </div>
@@ -312,7 +399,7 @@ export function ServicesSection() {
                       {Array.from({ length: 8 }).map((_, i) => (
                         <motion.div
                           key={i}
-                          className="absolute w-2 h-2 rounded-full bg-white/30"
+                          className="absolute w-2 h-2 rounded-full bg-[hsla(var(--primary-foreground),0.3)]" /* Changed bg-white/30 */
                           initial={{
                             x: Math.random() * 100 + '%',
                             y: Math.random() * 100 + '%',
@@ -334,11 +421,11 @@ export function ServicesSection() {
                     </div>
 
                     <div className="z-10 text-center px-6">
-                      <div className="inline-block mb-3 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-white text-sm font-medium">
+                      <div className="inline-block mb-3 px-3 py-1 bg-[hsla(var(--primary-foreground),0.1)] backdrop-blur-sm rounded-full text-[hsl(var(--primary-foreground))] text-sm font-medium"> {/* Changed bg-white/10 text-white */}
                         Premium Service
                       </div>
-                      <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">{service.name}</h2>
-                      <p className="text-white/80 max-w-2xl mx-auto">{service.description}</p>
+                      <h2 className="text-3xl md:text-4xl font-bold text-[hsl(var(--primary-foreground))] mb-2">{service.name}</h2> {/* Changed text-white */}
+                      <p className="text-[hsla(var(--primary-foreground),0.8)] max-w-2xl mx-auto">{service.description}</p> {/* Changed text-white/80 */}
                     </div>
                   </div>
 
@@ -453,8 +540,10 @@ export function ServicesSection() {
 
                       <Accordion type="single" collapsible className="mb-6">
                         <AccordionItem value="faq-1">
-                          <AccordionTrigger>What is the typical process for implementing {service.name.toLowerCase()}?</AccordionTrigger>
+                          {/* Added text-sm to AccordionTrigger */}
+                          <AccordionTrigger className="text-sm">What is the typical process for implementing {service.name.toLowerCase()}?</AccordionTrigger>
                           <AccordionContent>
+                            {/* AccordionContent already applies text-sm, p tag color is text-muted-foreground */}
                             <p className="text-muted-foreground">
                               Our implementation process typically involves an initial consultation to understand your needs, followed by a detailed proposal and project plan. We then proceed with implementation, testing, and deployment, with ongoing support and maintenance as needed.
                             </p>
@@ -462,7 +551,8 @@ export function ServicesSection() {
                         </AccordionItem>
 
                         <AccordionItem value="faq-2">
-                          <AccordionTrigger>How do you ensure the security of our data?</AccordionTrigger>
+                          {/* Added text-sm to AccordionTrigger */}
+                          <AccordionTrigger className="text-sm">How do you ensure the security of our data?</AccordionTrigger>
                           <AccordionContent>
                             <p className="text-muted-foreground">
                               We implement industry-leading security measures including encryption, access controls, regular security audits, and compliance with relevant regulations. Our team stays updated on the latest security threats and best practices to ensure your data remains protected.
@@ -471,7 +561,8 @@ export function ServicesSection() {
                         </AccordionItem>
 
                         <AccordionItem value="faq-3">
-                          <AccordionTrigger>Can your solutions integrate with our existing systems?</AccordionTrigger>
+                          {/* Added text-sm to AccordionTrigger */}
+                          <AccordionTrigger className="text-sm">Can your solutions integrate with our existing systems?</AccordionTrigger>
                           <AccordionContent>
                             <p className="text-muted-foreground">
                               Yes, our solutions are designed with interoperability in mind. We have experience integrating with a wide range of systems and platforms, and we'll work closely with your team to ensure seamless integration with your existing infrastructure.
@@ -490,15 +581,13 @@ export function ServicesSection() {
 
           {/* Contact Us for More Services Card */}
           {filter === "" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: filteredServices.length * 0.1 }}
-            >
+            // Added service-card-item for GSAP to target, removed motion.div
+            <div className="service-card-item opacity-0">  {/* Initial opacity for GSAP */}
+              {/* service-card class is kept for GSAP hover targeting. Removed CSS hover classes. */}
               <div
                 className={cn(
-                  "service-card bg-gradient-to-br from-[hsl(var(--deep-blue))] to-[hsl(var(--electric-cyan))] rounded-xl p-6 h-full cursor-pointer border border-[hsl(var(--electric-cyan))/30] hover:border-[hsl(var(--electric-cyan))]",
-                  "transition-all duration-300 ease-out shadow-sm hover:shadow-md hover:translate-y-[-5px]"
+                  "service-card bg-gradient-to-br from-[hsl(var(--deep-blue))] to-[hsl(var(--electric-cyan))] rounded-xl p-6 h-full cursor-pointer border border-[hsl(var(--electric-cyan))/30]",
+                  "shadow-sm"
                 )}
                 onClick={() => {
                   const contactSection = document.getElementById('contact')
@@ -507,21 +596,21 @@ export function ServicesSection() {
                   }
                 }}
               >
-                <div className="flex flex-col items-center text-center h-full justify-center text-white">
-                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm">
+                <div className="flex flex-col items-center text-center h-full justify-center text-[hsl(var(--primary-foreground))]"> {/* Changed text-white */}
+                  <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-4 bg-[hsla(var(--primary-foreground),0.1)] backdrop-blur-sm border border-[hsla(var(--primary-foreground),0.2)] shadow-sm"> {/* Changed bg-white/10, border-white/20 */}
                     <motion.div
                       initial={{ rotate: -10, scale: 0.9 }}
                       animate={{ rotate: 0, scale: 1 }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                      <Search className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
+                      <Search className="h-8 w-8 text-[hsl(var(--primary-foreground))] group-hover:scale-110 transition-transform duration-300" /> {/* Changed text-white */}
                     </motion.div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Need Something Specific?</h3>
-                  <p className="text-white/90 mb-4">We offer customized solutions tailored to your unique business challenges.</p>
+                  <h3 className="text-xl font-semibold mb-2">Need Something Specific?</h3> {/* Inherits primary-foreground */}
+                  <p className="text-[hsla(var(--primary-foreground),0.9)] mb-4">We offer customized solutions tailored to your unique business challenges.</p> {/* Changed text-white/90 */}
 
                   <div className="mt-auto">
-                    <span className="inline-block text-sm px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white font-medium border border-white/20 hover:bg-white/20 transition-colors duration-300">
+                    <span className="inline-block text-sm px-4 py-2 rounded-full bg-[hsla(var(--primary-foreground),0.1)] backdrop-blur-sm text-[hsl(var(--primary-foreground))] font-medium border border-[hsla(var(--primary-foreground),0.2)] hover:bg-[hsla(var(--primary-foreground),0.2)] transition-colors duration-300"> {/* Changed all white variants */}
                       Contact Us for Custom Solutions
                     </span>
                   </div>

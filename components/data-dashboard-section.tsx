@@ -111,7 +111,7 @@ export function DataDashboardSection() {
                             />
                           </div>
 
-                          <div className="text-4xl font-bold mb-2 flex items-center justify-center h-12">
+                          <div className="text-3xl sm:text-4xl font-bold mb-2 flex items-center justify-center h-12"> {/* Changed text-4xl */}
                             <CounterAnimation target={metric.value} suffix={metric.suffix} isInView={isInView} />
                           </div>
 

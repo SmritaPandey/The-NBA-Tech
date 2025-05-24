@@ -25,37 +25,40 @@ export function Footer() {
   const newsletterFormId = "3tKPUffptcus" // Newsletter subscription form
 
   return (
-    <footer className="bg-[hsl(var(--deep-blue))] text-white pt-16 pb-8">
+    <footer className="bg-[hsl(var(--deep-blue))] text-[hsl(var(--primary-foreground))] pt-16 pb-8"> {/* Changed text-white */}
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-bold bg-gradient-to-r from-white to-[hsl(var(--electric-cyan))] bg-clip-text text-transparent">
+              {/* Changed from-white */}
+              <span className="text-2xl font-bold bg-gradient-to-r from-[hsl(var(--primary-foreground))] to-[hsl(var(--electric-cyan))] bg-clip-text text-transparent">
                 NBA TECH
               </span>
             </Link>
-            <p className="text-white/70 mb-6">
+            {/* Changed text-white/70 */}
+            <p className="text-[hsla(var(--primary-foreground),0.7)] mb-6">
               Delivering high-impact software solutions and cybersecurity services that transform businesses. Trusted by industry leaders since 2018 for innovation, security, and measurable results.
             </p>
             <div className="flex gap-4">
-              <motion.a href="https://www.facebook.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              {/* Changed text-white/70 hover:text-white */}
+              <motion.a href="https://www.facebook.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                 <Facebook size={20} />
                 <span className="sr-only">Facebook</span>
               </motion.a>
-              <motion.a href="https://twitter.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://twitter.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                 <Twitter size={20} />
                 <span className="sr-only">Twitter</span>
               </motion.a>
-              <motion.a href="https://www.instagram.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://www.instagram.com/thenbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                 <Instagram size={20} />
                 <span className="sr-only">Instagram</span>
               </motion.a>
-              <motion.a href="https://www.linkedin.com/company/nbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://www.linkedin.com/company/nbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                 <Linkedin size={20} />
                 <span className="sr-only">LinkedIn</span>
               </motion.a>
-              <motion.a href="https://github.com/nbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-white/70 hover:text-white transition-colors">
+              <motion.a href="https://github.com/nbatech" target="_blank" rel="noopener noreferrer" whileHover={{ y: -3 }} className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                 <Github size={20} />
                 <span className="sr-only">GitHub</span>
               </motion.a>
@@ -64,12 +67,12 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Services</h3>
+            <h3 className="text-lg font-semibold mb-4">Services</h3> {/* Will inherit themed text color */}
             <ul className="space-y-3">
               <li>
                 <Link
                   href="#services"
-                  className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors flex items-center gap-2"
                 >
                   <Code size={16} />
                   Software Development
@@ -78,7 +81,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#services"
-                  className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors flex items-center gap-2"
                 >
                   <Shield size={16} />
                   Cybersecurity
@@ -87,7 +90,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#services"
-                  className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors flex items-center gap-2"
                 >
                   <Users size={16} />
                   HR & Training
@@ -96,7 +99,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#services"
-                  className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors flex items-center gap-2"
                 >
                   <BarChart size={16} />
                   Digital Marketing
@@ -105,7 +108,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#services"
-                  className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors flex items-center gap-2"
                 >
                   <Database size={16} />
                   Infrastructure
@@ -116,30 +119,30 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-4">Quick Links</h3> {/* Will inherit themed text color */}
             <ul className="space-y-3">
               <li>
-                <Link href="/#hero" className="text-white/70 hover:text-white transition-colors">
+                <Link href="/#hero" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/#case-studies" className="text-white/70 hover:text-white transition-colors">
+                <Link href="/#case-studies" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                   Case Studies
                 </Link>
               </li>
               <li>
-                <Link href="/#services" className="text-white/70 hover:text-white transition-colors">
+                <Link href="/#services" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                   Careers
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-white/70 hover:text-white transition-colors">
+                <Link href="/blog" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="/#contact" className="text-white/70 hover:text-white transition-colors">
+                <Link href="/#contact" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] transition-colors">
                   Contact
                 </Link>
               </li>
@@ -148,8 +151,8 @@ export function Footer() {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Get Exclusive Insights</h3>
-            <p className="text-white/70 mb-4">
+            <h3 className="text-lg font-semibold mb-4">Get Exclusive Insights</h3> {/* Will inherit themed text color */}
+            <p className="text-[hsla(var(--primary-foreground),0.7)] mb-4">
               Join industry leaders receiving our monthly tech briefing with actionable strategies, security alerts, and exclusive content not published anywhere else.
             </p>
             <button
@@ -203,18 +206,18 @@ export function Footer() {
           </div>
         </div>
 
-        <Separator className="bg-white/10 my-8" />
+        <Separator className="bg-[hsla(var(--primary-foreground),0.1)] my-8" /> {/* Changed bg-white/10 */}
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-white/70 text-sm">&copy; {currentYear} NBA TECH. All rights reserved.</p>
+          <p className="text-[hsla(var(--primary-foreground),0.7)] text-sm">&copy; {currentYear} NBA TECH. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="/privacy-policy" className="text-white/70 hover:text-white text-sm transition-colors">
+            <Link href="/privacy-policy" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] text-sm transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms" className="text-white/70 hover:text-white text-sm transition-colors">
+            <Link href="/terms" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] text-sm transition-colors">
               Terms of Service
             </Link>
-            <Link href="/cookies" className="text-white/70 hover:text-white text-sm transition-colors">
+            <Link href="/cookies" className="text-[hsla(var(--primary-foreground),0.7)] hover:text-[hsl(var(--primary-foreground))] text-sm transition-colors">
               Cookie Policy
             </Link>
           </div>

@@ -116,6 +116,9 @@
   * {
     @apply border-border;
   }
+  html { /* Added to html for global effect */
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
   }
@@ -153,9 +156,7 @@
   -webkit-transform: translateZ(0);
 }
 
-.service-card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
+/* GSAP now handles hover effects for .service-card in ServicesSection */
 
 .case-study-card {
   transition: all 0.3s ease;
@@ -185,17 +186,7 @@
   content: counter(count);
 }
 
-/* Scroll animations */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Scroll animations ( .reveal class removed, to be replaced by GSAP ScrollTrigger implementations) */
 
 /* Parallax layers */
 .parallax-layer {
@@ -289,7 +280,8 @@
   top: 0;
   left: 0;
   pointer-events: none;
-  background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+  /* Changed #fff to a variable for theme consistency */
+  background-image: radial-gradient(circle, hsla(var(--primary-foreground), 0.5) 10%, transparent 10.01%);
   background-repeat: no-repeat;
   background-position: 50%;
   transform: scale(10, 10);

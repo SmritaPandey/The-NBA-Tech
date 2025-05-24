@@ -1,7 +1,9 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { motion, useInView } from "framer-motion"
+import { motion, useInView } from "framer-motion" // useInView will be removed
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
@@ -259,9 +261,74 @@ export function CaseStudiesSection() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [activeCategory, setActiveCategory] = useState("all")
   const [activeProject, setActiveProject] = useState<string | null>(null)
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.2 })
-  // Removed scroll-based opacity animation
+  const sectionRef = useRef<HTMLDivElement>(null) // Renamed ref to sectionRef
+  const titleRef = useRef<HTMLDivElement>(null)
+  const gridContainerRef = useRef<HTMLDivElement>(null) // For the TabsContent or a div wrapping ProjectGrid
+  // const isInView = useInView(sectionRef, { once: true, amount: 0.2 }) // Will be removed
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+    const mm = gsap.matchMedia()
+
+    mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Section Title Animation
+      if (titleRef.current) {
+        gsap.fromTo(
+          titleRef.current,
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: "top bottom-=100px",
+              once: true,
+            },
+          }
+        )
+      }
+
+      // Project Cards Staggered Animation
+      // We need to ensure this targets cards correctly even with Tabs
+      // This might need to be re-evaluated based on TabsContent re-renders
+      // For now, let's assume we can target all .case-study-card elements within gridContainerRef
+      if (gridContainerRef.current) {
+        const cards = gsap.utils.toArray<HTMLDivElement>(
+          gridContainerRef.current.querySelectorAll(".case-study-card")
+        );
+        if (cards.length > 0) {
+          gsap.set(cards, { opacity: 0, y: 50, scale: 0.95 });
+          gsap.to(
+            cards,
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 0.6,
+              ease: "power3.out",
+              stagger: 0.15,
+              scrollTrigger: {
+                trigger: gridContainerRef.current,
+                start: "top bottom-=150px",
+                once: true, // Important if tabs re-render and hide/show cards
+              },
+            }
+          );
+        }
+      }
+    });
+
+    return () => {
+      mm.revert();
+      ScrollTrigger.getAll().forEach(trigger => {
+         if (trigger.vars.trigger === titleRef.current || trigger.vars.trigger === gridContainerRef.current) {
+          trigger.kill();
+        }
+      });
+    };
+  }, [activeCategory]); // Re-run if activeCategory changes, as cards might be re-rendered by Tabs
 
   // For the sticky project navigator
   const projectRefs = useRef<{ [key: string]: HTMLDivElement | null }>({})
@@ -292,55 +359,52 @@ export function CaseStudiesSection() {
   }, [isDialogOpen, selectedCase])
 
   return (
-    <section id="case-studies" className="pt-32 pb-20 bg-background relative overflow-hidden" ref={ref}>
+    <section id="case-studies" className="pt-32 pb-20 bg-background relative overflow-hidden" ref={sectionRef}>
       {/* Background data stream animation */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <ClientOnlyDataStreams />
       </div>
 
       <div className="container mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
+        <div ref={titleRef} className="text-center mb-12"> {/* Removed motion.div, add ref */}
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Work</h2>
           <p className="text-foreground/70 max-w-2xl mx-auto">
             Explore our portfolio of successful projects across various industries and technologies.
           </p>
         </motion.div>
 
-        <Tabs defaultValue="all" className="w-full" onValueChange={setActiveCategory}>
-          <div className="flex justify-center mb-8">
-            <TabsList className="bg-muted/50 p-1">
-              <TabsTrigger
+        {/* Assign gridContainerRef to the Tabs component or a wrapping div */}
+        <div ref={gridContainerRef}>
+          <Tabs defaultValue="all" className="w-full" onValueChange={setActiveCategory}>
+            <div className="flex flex-wrap justify-center mb-8"> {/* Added flex-wrap */}
+              <TabsList className="bg-muted/50 p-1">
+                <TabsTrigger
                 value="all"
-                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-black"
+                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-[hsl(var(--deep-blue))]" /* Changed text-black */
               >
                 All Projects
               </TabsTrigger>
               <TabsTrigger
                 value="web"
-                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-black"
+                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-[hsl(var(--deep-blue))]" /* Changed text-black */
               >
                 Web
               </TabsTrigger>
               <TabsTrigger
                 value="mobile"
-                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-black"
+                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-[hsl(var(--deep-blue))]" /* Changed text-black */
               >
                 Mobile
               </TabsTrigger>
               <TabsTrigger
                 value="crm"
-                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-black"
+                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-[hsl(var(--deep-blue))]" /* Changed text-black */
               >
                 CRM
               </TabsTrigger>
               <TabsTrigger
                 value="enterprise"
-                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-black"
+                className="rounded-md data-[state=active]:bg-[hsl(var(--electric-cyan))] data-[state=active]:text-[hsl(var(--deep-blue))]" /* Changed text-black */
               >
                 Enterprise
               </TabsTrigger>
@@ -348,25 +412,26 @@ export function CaseStudiesSection() {
           </div>
 
           <TabsContent value="all" className="mt-0">
-            <ProjectGrid
-              projects={caseStudies}
-              setSelectedCase={setSelectedCase}
-              setIsDialogOpen={setIsDialogOpen}
-              isInView={isInView}
-            />
-          </TabsContent>
-
-          {["web", "mobile", "crm", "enterprise"].map((category) => (
-            <TabsContent key={category} value={category} className="mt-0">
               <ProjectGrid
-                projects={caseStudies.filter((cs) => cs.category === category)}
+                projects={caseStudies}
                 setSelectedCase={setSelectedCase}
                 setIsDialogOpen={setIsDialogOpen}
-                isInView={isInView}
+                // isInView is removed from ProjectGrid props
               />
             </TabsContent>
-          ))}
-        </Tabs>
+
+            {["web", "mobile", "crm", "enterprise"].map((category) => (
+              <TabsContent key={category} value={category} className="mt-0">
+                <ProjectGrid
+                  projects={caseStudies.filter((cs) => cs.category === category)}
+                  setSelectedCase={setSelectedCase}
+                  setIsDialogOpen={setIsDialogOpen}
+                  // isInView is removed from ProjectGrid props
+                />
+              </TabsContent>
+            ))}
+          </Tabs>
+        </div>
 
         {/* Case Study Detail Dialog */}
         <Dialog
@@ -447,7 +512,7 @@ export function CaseStudiesSection() {
                       <h3 className="text-lg font-semibold mb-3">Technology Stack</h3>
                       <div className="bg-muted/30 rounded-lg p-6 relative overflow-hidden">
                         {/* Tech Flow Animation */}
-                        <div className="flex justify-between items-center relative z-10">
+                        <div className="flex flex-wrap justify-between items-center relative z-10 gap-4"> {/* Added flex-wrap and gap for spacing when wrapped */}
                           {selectedCase.details.techFlow.map((tech, index) => (
                             <motion.div
                               key={index}
@@ -584,7 +649,12 @@ function ProjectGrid({
   projects: typeof caseStudies
   setSelectedCase: (project: (typeof caseStudies)[0]) => void
   setIsDialogOpen: (open: boolean) => void
-  isInView?: boolean
+  // isInView parameter is no longer used since we removed animations
+}: {
+  projects: typeof caseStudies
+  setSelectedCase: (project: (typeof caseStudies)[0]) => void
+  setIsDialogOpen: (open: boolean) => void
+  // isInView?: boolean; // Removed
 }) {
   const [showAll, setShowAll] = useState(false);
 
@@ -610,9 +680,10 @@ function ProjectGrid({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedProjects.length > 0 ? (
           displayedProjects.map((project) => (
+          // Added opacity-0 for GSAP initial state, GSAP targets .case-study-card
           <div
             key={project.id}
-            className="case-study-card perspective"
+            className="case-study-card perspective opacity-0" 
           >
             <TiltCard
               className="h-full relative group cursor-pointer"
@@ -636,12 +707,12 @@ function ProjectGrid({
 
                   {/* Quick-stats overlay on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-[hsl(var(--deep-blue))/90] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                    <h3 className="text-white font-bold">{project.title}</h3>
+                    <h3 className="text-[hsl(var(--primary-foreground))] font-bold">{project.title}</h3> {/* Changed text-white */}
                     <div className="grid grid-cols-3 gap-2 mt-2">
                       {Object.entries(project.stats).map(([key, value]) => (
-                        <div key={key} className="bg-white/10 backdrop-blur-sm rounded-md p-1 text-center">
-                          <div className="text-white text-sm font-medium">{value}</div>
-                          <div className="text-white/70 text-xs">{key}</div>
+                        <div key={key} className="bg-[hsla(var(--primary-foreground),0.1)] backdrop-blur-sm rounded-md p-1 text-center"> {/* Changed bg-white/10 */}
+                          <div className="text-[hsl(var(--primary-foreground))] text-sm font-medium">{value}</div> {/* Changed text-white */}
+                          <div className="text-[hsla(var(--primary-foreground),0.7)] text-xs">{key}</div> {/* Changed text-white/70 */}
                         </div>
                       ))}
                     </div>

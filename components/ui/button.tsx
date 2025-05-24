@@ -1,4 +1,6 @@
 import * as React from "react"
+import { useEffect, useRef } from "react" // Added useEffect, useRef
+import { gsap } from "gsap" // Added gsap
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -42,17 +44,61 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  ({ className, variant, size, asChild = false, ...props }, forwardedRef) => {
+    const Comp = asChild ? Slot : "button";
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    // Use a combined ref if a forwardedRef is provided
+    const ref = forwardedRef || buttonRef;
+
+    useEffect(() => {
+      if (ref && 'current' in ref && ref.current) {
+        const buttonElement = ref.current;
+        gsap.set(buttonElement, { transformOrigin: "center center" });
+
+        const mm = gsap.matchMedia();
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+          const tl = gsap.timeline({ paused: true });
+          tl.to(buttonElement, {
+            scale: 1.05, // Subtle scale effect
+            duration: 0.2,
+            ease: "power1.out",
+          });
+
+          const focusTl = gsap.timeline({ paused: true });
+          focusTl.to(buttonElement, {
+            scale: 1.02, // Slightly different scale for focus, or could be same
+             // Example: add a ring-like effect via boxShadow if desired, though focus-visible handles ring
+            // boxShadow: "0 0 0 2px hsl(var(--ring))", 
+            duration: 0.2,
+            ease: "power1.out",
+          });
+
+          buttonElement.addEventListener("mouseenter", () => tl.play());
+          buttonElement.addEventListener("mouseleave", () => tl.reverse());
+          buttonElement.addEventListener("focus", () => focusTl.play());
+          buttonElement.addEventListener("blur", () => focusTl.reverse());
+          
+          return () => { // Cleanup for matchMedia
+            tl.kill();
+            focusTl.kill();
+          };
+        });
+        
+        return () => { // Main useEffect cleanup
+          mm.revert(); 
+        };
+      }
+    }, [ref]); // Rerun if ref changes
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       />
-    )
+    );
   }
-)
-Button.displayName = "Button"
+);
+Button.displayName = "Button";
 
 export { Button, buttonVariants }

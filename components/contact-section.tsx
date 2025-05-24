@@ -139,7 +139,7 @@ export function ContactSection() {
                 </p>
                 <div className="w-full">
                   <button
-                    className="w-full bg-[hsl(var(--cybersecurity-green))] hover:bg-[hsl(var(--cybersecurity-green))/90] text-white px-4 py-2 rounded-md flex items-center justify-center"
+                    className="w-full bg-[hsl(var(--cybersecurity-green))] hover:bg-[hsl(var(--cybersecurity-green))/90] text-[hsl(var(--primary-foreground))] px-4 py-2 rounded-md flex items-center justify-center" /* Changed text-white */
                     onClick={() => {
                       // Create modal for the form
                       const modal = document.createElement('div');

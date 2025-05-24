@@ -124,7 +124,7 @@ export function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-4 text-lg text-foreground/80 max-w-lg leading-relaxed"
+              className="mt-4 text-base md:text-lg text-foreground/80 max-w-lg leading-relaxed" /* Changed text-lg to text-base md:text-lg */
             >
               Empowering businesses with custom software solutions, advanced cybersecurity, and strategic digital transformation. Trusted by industry leaders to deliver measurable ROI and competitive advantage.
             </motion.p>

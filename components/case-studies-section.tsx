@@ -252,6 +252,35 @@ const caseStudies = [
       ],
     },
   },
+  {
+    id: "reconify",
+    title: "Reconify",
+    category: "web",
+    thumbnail: "/Reconify.png",
+    description: "AI-powered reconnaissance and monitoring platform.",
+    techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel"],
+    liveUrl: "https://reconify-cyan.vercel.app/",
+    stats: {
+      visitors: "New",
+      launch: "2025",
+      status: "Live",
+    },
+    details: {
+      challenge:
+        "Provide a streamlined, fast, and modern interface to explore Reconify's capabilities.",
+      solution:
+        "A performant marketing site and product showcase built with Next.js, optimized for static export and Vercel hosting.",
+      impact:
+        "Improved product discovery and simplified onboarding for early adopters.",
+      screenshots: ["/Login.png?height=400&width=700", "/Dashboard.png?height=400&width=700", "/Admin.png?height=400&width=700"],
+      techFlow: [
+        { name: "Next.js", icon: Globe, description: "React framework" },
+        { name: "TypeScript", icon: Code, description: "Typed JS" },
+        { name: "Tailwind", icon: Code, description: "Styling" },
+        { name: "Vercel", icon: Server, description: "Hosting" },
+      ],
+    },
+  },
 ]
 
 export function CaseStudiesSection() {
@@ -594,9 +623,13 @@ function ProjectGrid({
   };
 
   // Sort projects to prioritize those with real images
+  
+    
   const sortedProjects = [...projects].sort((a, b) => {
     const aHasRealImage = hasRealImage(a);
     const bHasRealImage = hasRealImage(b);
+    if (a.id === 'reconify' && b.id !== 'reconify') return -1;
+    if (b.id === 'reconify' && a.id !== 'reconify') return 1;
 
     if (aHasRealImage && !bHasRealImage) return -1; // a comes first
     if (!aHasRealImage && bHasRealImage) return 1;  // b comes first
